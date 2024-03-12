@@ -1,36 +1,58 @@
-import groovy.json.JsonSlurperClassic
-
-def jsonParse(def json) {
-    new groovy.json.JsonSlurperClassic().parseText(json)
-}
 pipeline {
-  agent { label 'principal' }
-  environment {
-    appName = "variable" 
-  }
-  stages {
-
- stage("paso 1"){
-     
-      steps {
-          script {			
-           sh "echo 'hola mundo'"
-        }
-      }
+  agent any
+ parameters {
+        string(name: 'name_container', defaultValue: 'proyecto-qa', description: 'nombre del docker')
+        string(name: 'name_imagen', defaultValue: 'iproyecto-qa', description: 'nombre de la imagen')
+        string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
+        string(name: 'puerto_imagen', defaultValue: '81', description: 'puerto a publicar')
     }
-  }
-  post {
-      always {          
-          deleteDir()
-           sh "echo 'fase always'"
-      }
-      success {
-            sh "echo 'fase success'"
-        }
+    environment {
+        name_final = "${name_container}${tag_imagen}${puerto_imagen}"        
+    }
+    stages {
+/*           stage('stop/rm') {
 
-      failure {
-            sh "echo 'fase failure'"
-      }
-      
-  }
-}  
+            when {
+                expression { 
+                    DOCKER_EXIST = sh(returnStdout: true, script: 'echo "$(docker ps -q --filter name=${name_final})"').trim()
+                    return  DOCKER_EXIST != '' 
+                }
+            }
+            steps {
+                script{
+                    sh ''' 
+                         docker stop ${name_final}
+                    '''
+                    }
+                    
+                }                    
+                                  
+            } */
+           
+/*         stage('build') {
+            steps {
+                script{
+                    sh ''' 
+                    docker build    jobs/dockerweb/ -t ${name_imagen}:${tag_imagen}
+                    '''
+                    }
+                    
+                }                    
+                                  
+            } */
+            stage('run') {
+            steps {
+                script{
+                    sh ''' 
+                        docker run hello-world
+ 
+                    '''
+                    }
+                    
+                }                    
+                                  
+            }
+            
+          
+        }   
+    }
