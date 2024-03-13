@@ -10,7 +10,7 @@ pipeline {
         name_final = "${name_container}${tag_imagen}${puerto_imagen}"        
     }
     stages {
-/*           stage('stop/rm') {
+           stage('stop/rm') {
 
             when {
                 expression { 
@@ -25,11 +25,18 @@ pipeline {
                     '''
                     }
                     
-                }                    
+                }
+                script{
+                    sh ''' 
+                         docker rm ${name_final}
+                    '''
+                    }
+                    
+                }                 
                                   
-            } */
+            }
            
-/*         stage('build') {
+         stage('build') {
             steps {
                 script{
                     sh ''' 
@@ -39,12 +46,12 @@ pipeline {
                     
                 }                    
                                   
-            } */
+            }
             stage('run') {
             steps {
                 script{
                     sh ''' 
-                        docker run hello-world
+                        docker run -dp ${puerto_imagen}:80 --name ${name_final} ${name_imagen}:${tag_imagen}
  
                     '''
                     }
