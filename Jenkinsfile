@@ -25,7 +25,7 @@ pipeline {
                     '''
                     }
                     
-                }
+
                 script{
                     sh ''' 
                          docker rm ${name_final}
@@ -33,7 +33,7 @@ pipeline {
                     }
                     
                 }                 
-                                  
+                     
             }
            
          stage('build') {
