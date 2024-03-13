@@ -12,14 +12,14 @@ pipeline {
             steps {
                 script{
                     sh ''' 
-                         docker stop ${name_final}
+                         docker stop ${name_final} 2>/dev/null
                     '''
                     }
                     
 
                 script{
                     sh ''' 
-                         docker rm ${name_final}
+                         docker rm ${name_final} 2>/dev/null
                     '''
                     }
                     
