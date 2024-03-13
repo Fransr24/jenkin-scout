@@ -1,23 +1,14 @@
 pipeline {
   agent any
- parameters {
-        string(name: 'name_container', defaultValue: 'proyecto-qa', description: 'nombre del docker')
-        string(name: 'name_imagen', defaultValue: 'iproyecto-qa', description: 'nombre de la imagen')
-        string(name: 'tag_imagen', defaultValue: 'latest', description: 'etiqueta de la imagen')
-        string(name: 'puerto_imagen', defaultValue: '81', description: 'puerto a publicar')
-    }
     environment {
+        name_container='ubuntu'
+        name_imagen='ubuntu'
+        tag_imagen='latest'
+        puerto_imagen='81'
         name_final = "${name_container}${tag_imagen}${puerto_imagen}"        
     }
     stages {
            stage('stop/rm') {
-
-            when {
-                expression { 
-                    DOCKER_EXIST = sh(returnStdout: true, script: 'echo "$(docker ps -q --filter name=${name_final})"').trim()
-                    return  DOCKER_EXIST != '' 
-                }
-            }
             steps {
                 script{
                     sh ''' 
